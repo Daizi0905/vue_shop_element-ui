@@ -12,3 +12,12 @@ export const getUsers = param => {
 export const userState = (id, type,param) => {
     return Put(`users/${id}/state/${type}`, param)
 }
+// 添加用户
+export const addUsers = param => {
+    return Post('users', param)
+}
+// 根据id查询用户信息
+export const queryUser = id => {
+    // console.log(id)
+    return Get(`users/${id}`)
+}

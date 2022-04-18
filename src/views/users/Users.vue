@@ -16,7 +16,7 @@
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary">添加用户</el-button>
+          <el-button type="primary" @click="addUserBox = true">添加用户</el-button>
         </el-col>
       </el-row>
       <!--    用户列表数据-->
@@ -57,7 +57,7 @@
             label="操作">
           <template #default="scope">
             <el-tooltip class="item" effect="dark" content="修改" placement="top" :enterable="false">
-              <el-button type="primary" icon="el-icon-edit" size="mini" circle></el-button>
+              <el-button type="primary" icon="el-icon-edit" size="mini" circle @click="changeUser(scope.row)"></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="分配角色" placement="top" :enterable="false">
               <el-button type="warning" icon="el-icon-setting" size="mini" circle></el-button>
@@ -79,16 +79,79 @@
           :total="total">
       </el-pagination>
     </el-card>
+<!--   添加用户对话框 -->
+    <el-dialog
+        title="添加用户"
+        :visible.sync="addUserBox"
+        width="50%"
+    @close="resetForm">
+      <el-form :model="addUserForm" :rules="addUserFormRules" ref="addUserForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="用户名：" prop="username">
+          <el-input v-model="addUserForm.username"></el-input>
+        </el-form-item>
+        <el-form-item label="密码:" prop="password">
+          <el-input v-model="addUserForm.password"></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱:" prop="email">
+          <el-input v-model="addUserForm.email"></el-input>
+        </el-form-item>
+        <el-form-item label="手机:" prop="mobile">
+          <el-input v-model="addUserForm.mobile"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="addUserBox = false">取 消</el-button>
+    <el-button type="primary" @click="addUser">确 定</el-button>
+  </span>
+    </el-dialog>
+<!--    修改用户信息对话框-->
+    <el-dialog
+        title="添加用户"
+        :visible.sync="changeUserBox"
+        width="50%"
+        @close="resetForm">
+      <el-form :model="changeUserFrom" :rules="addUserFormRules" ref="addUserForm" label-width="100px" class="demo-ruleForm">
+        <el-form-item label="用户名：">
+          <el-input v-model="changeUserFrom.username" disabled></el-input>
+        </el-form-item>
+        <el-form-item label="邮箱:" prop="email">
+          <el-input v-model="changeUserFrom.email"></el-input>
+        </el-form-item>
+        <el-form-item label="手机:" prop="mobile">
+          <el-input v-model="changeUserFrom.mobile"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="changeUserBox = false">取 消</el-button>
+    <el-button type="primary" @click="addUser">确 定</el-button>
+  </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import {getUsers, userState} from "@/config/api";
+import {getUsers, userState, addUsers, queryUser} from "@/config/api";
 
 export default {
   name: "Users",
   data() {
+    // 邮箱验证
+    var checkEmail = (rules, value, cb) => {
+      // 验证邮箱的正则表达式
+      const regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
+      if (regEmail.test(value)) return cb()
+      cb(new Error('请输入合法的邮箱！'))
+    }
+    // 手机号码验证
+    var checkMobile = (rules, value, cb) => {
+      const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+      if (regMobile.test(value)) return cb()
+      cb(new Error('请输入合法的手机号码！'))
+    }
     return {
+      total: 0, //  总页数
+      addUserBox: false,  // 添加用户对话框
+      changeUserBox: false,  // 修改用户信息对话框
       // 获取用户列表的对象参数
       queryInfo: {
         query: '',  // 搜索关键字
@@ -97,7 +160,34 @@ export default {
       },
       //  用户列表
       userList: [],
-      total: 0
+      // 添加用户的表单
+      addUserForm: {
+        username: '',
+        password: '',
+        email: '',
+        mobile: ''
+      },
+      // 修改用户信息表单
+      changeUserFrom: {},
+      // 添加用户表单验证
+      addUserFormRules: {
+        username: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { min: 2, max: 10, message: '用户名长度在2-10个字符之间', trigger: 'blur' }
+        ],
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, max: 15, message: '密码长度在6-15个字符之间', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' },
+          { validator: checkEmail, trigger: 'blur' }
+        ],
+        mobile: [
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { validator: checkMobile, trigger: 'blur' }
+        ]
+      }
     }
   },
   methods: {
@@ -136,6 +226,43 @@ export default {
         }
         this.$message.success('更新用户状态成功！')
         // console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
+    },
+    // 添加用户取消按钮
+    resetForm() {
+      this.$refs.addUserForm.resetFields()
+    },
+  //  添加用户确定按钮
+    addUser() {
+      this.$refs.addUserForm.validate(valid => {
+        // console.log(valid)
+        if (!valid) return
+        addUsers(this.addUserForm).then(res => {
+          // console.log(res)
+          if (res.meta.status !== 201) return this.$message.error(res.meta.msg)
+          this.$message.success(res.meta.msg)
+          this.getUsersList()
+          this.addUserBox = false
+        }).catch(err => {
+          console.log(err)
+        })
+      })
+    },
+  //  修改用户信息
+    changeUser(row) {
+      this.changeUserBox = true
+      // this.changeUserFrom.username = row.username
+      // this.changeUserFrom.email = row.email
+      // this.changeUserFrom.mobile = row.mobile
+      console.log(row.id)
+      queryUser(row.id).then(res => {
+        console.log(res)
+        if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+        this.changeUserFrom = res.data
+        // this.changeUserFrom.email = res.data.email
+        // this.changeUserFrom.mobile = res.data.mobile
       }).catch(err => {
         console.log(err)
       })
