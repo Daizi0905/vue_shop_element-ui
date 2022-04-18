@@ -24,7 +24,8 @@
             unique-opened
             :collapse="isCollapse"
             :collapse-transition="false"
-            router>
+            router
+        :default-active="$route.path">
           <!--            一级菜单-->
           <el-submenu v-for="item in menusList" :key="item.id" :index="String(item.id)">
             <template slot="title">
@@ -32,7 +33,7 @@
               <span>{{ item.authName }}</span>
             </template>
             <!--              二级菜单-->
-            <el-menu-item :index="secondItem.id" v-for="secondItem in item.children" :key="secondItem.id">
+            <el-menu-item :index="'/' + secondItem.path" v-for="secondItem in item.children" :key="secondItem.id">
               <template slot="title">
                 <i class="el-icon-menu"></i>
                 <span>{{ secondItem.authName }}</span>
@@ -50,6 +51,8 @@
 </template>
 
 <script>
+import { getMenuList } from "@/config/api";
+
 export default {
   name: "Home",
   data() {
@@ -80,11 +83,20 @@ export default {
       console.log(key, keyPath);
     },
     // 请求左侧菜单数据
-    async getMenuList() {
-      const {data: res} = await this.axios.get('menus')
-      console.log(res)
-      if (res.meta.status !== 200) return this.$message.error('请求菜单栏数据失败！！！')
-      this.menusList = res.data
+    // async getMenuList() {
+    //   const {data: res} = await this.axios.get('menus')
+    //   console.log(res)
+    //   if (res.meta.status !== 200) return this.$message.error('请求菜单栏数据失败！！！')
+    //   this.menusList = res.data
+    // },
+    getMenuList() {
+      getMenuList().then(res => {
+          if (res.meta.status !== 200) return this.$message.error('请求菜单栏数据失败！！！')
+          this.menusList = res.data
+        // console.log(res)
+      }).catch(err => {
+        console.log(err)
+      })
     },
     //  左侧菜单的切换收起
     toggleCollapse() {
