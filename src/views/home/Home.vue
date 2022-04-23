@@ -1,4 +1,43 @@
 <template>
+<!--  <div  class="home_view">-->
+<!--    <el-container class="home_view">-->
+<!--      <el-header>-->
+<!--              <div class="logo">-->
+<!--                <img src="../../assets/logo.png" width="60px" alt="" style="margin-right: 20px;">-->
+<!--                <span>电商后台管理系统</span>-->
+<!--              </div>-->
+<!--              <el-button type="info" @click="logout">退出</el-button>-->
+<!--      </el-header>-->
+<!--      <el-container>-->
+<!--        <el-aside width="200px">Aside</el-aside>-->
+<!--        <el-main>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--          <h1>Main</h1>-->
+<!--        </el-main>-->
+<!--      </el-container>-->
+<!--    </el-container>-->
+<!--  </div>-->
+
   <el-container class="home_view">
     <!--      Header-->
     <el-header>

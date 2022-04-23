@@ -29,3 +29,32 @@ export const changeUsers = (id, param) => {
 export const deleteUser = id => {
     return Delete(`users/${id}`)
 }
+
+// 获取权限管理列表结构
+export const getRights = type => {
+    return Get(`rights/${type}`)
+}
+// 获取角色列表
+export const getRoles = () => {
+    return Get('roles')
+}
+// 添加角色
+export const addRoles = param => {
+    return Post('roles', param)
+}
+// 编辑角色
+export const editRoles = (id, param) => {
+    return Put(`roles/${id}`, param)
+}
+// 删除角色
+export const deleteRoles = id => {
+    return Delete(`roles/${id}`)
+}
+// 删除角色权限
+export const deleteRolesRight = (roleID, rightID) => {
+    return Delete(`roles/${roleID}/rights/${rightID}`)
+}
+// 角色授权
+export const allotRolesRight = (roleId, idStr) => {
+    return Post(`roles/${roleId}/rights`, idStr)
+}
