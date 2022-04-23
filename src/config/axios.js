@@ -72,3 +72,36 @@ export function Put(url, param) {
         })
     })
 }
+
+// export function Delete(url, param) {
+//     return new Promise((resolve, reject) => {
+//         axios.delete(url, param, {
+//             // headers: {
+//             //     token: localStorage.getItem('token')
+//             // }
+//         }).then(response => {
+//             resolve(response.data)
+//         }, err => {
+//             reject(err)
+//         }).catch(error => {
+//             reject(error)
+//         })
+//     })
+// }
+
+export function Delete(url, params) {
+    return new Promise((resolve, reject) => {
+        axios.delete(url, params, {
+            // data: qs.stringify(params),
+            // headers: {
+            //     'Content-Type': 'application/x-www-form-urlencoded;text/html;charset=utf-8'
+            // }
+        }).then(response => {
+            resolve(response.data)
+        }, err => {
+            reject(err)
+        }).catch((error) => {
+            reject(error)
+        })
+    })
+}

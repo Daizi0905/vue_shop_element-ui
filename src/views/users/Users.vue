@@ -57,13 +57,13 @@
             label="操作">
           <template #default="scope">
             <el-tooltip class="item" effect="dark" content="修改" placement="top" :enterable="false">
-              <el-button type="primary" icon="el-icon-edit" size="mini" circle @click="changeUser(scope.row)"></el-button>
+              <el-button type="primary" icon="el-icon-edit" size="mini" circle @click="changeUsersFrom(scope.row)"></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="分配角色" placement="top" :enterable="false">
               <el-button type="warning" icon="el-icon-setting" size="mini" circle></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="删除" placement="top" :enterable="false">
-              <el-button type="danger" icon="el-icon-delete" size="mini" circle></el-button>
+              <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="removeUsers(scope.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -106,7 +106,7 @@
     </el-dialog>
 <!--    修改用户信息对话框-->
     <el-dialog
-        title="添加用户"
+        title="修改用户信息"
         :visible.sync="changeUserBox"
         width="50%"
         @close="resetForm">
@@ -123,14 +123,14 @@
       </el-form>
       <span slot="footer" class="dialog-footer">
     <el-button @click="changeUserBox = false">取 消</el-button>
-    <el-button type="primary" @click="addUser">确 定</el-button>
+    <el-button type="primary" @click="changeUser">确 定</el-button>
   </span>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import {getUsers, userState, addUsers, queryUser} from "@/config/api";
+import {getUsers, userState, addUsers, queryUser, changeUsers, deleteUser} from "@/config/api";
 
 export default {
   name: "Users",
@@ -250,22 +250,53 @@ export default {
         })
       })
     },
-  //  修改用户信息
-    changeUser(row) {
+  //  修改用户信息表单
+    changeUsersFrom(row) {
       this.changeUserBox = true
-      // this.changeUserFrom.username = row.username
-      // this.changeUserFrom.email = row.email
-      // this.changeUserFrom.mobile = row.mobile
-      console.log(row.id)
+      // console.log(row.id)
+      // 通过id发送数据请求
       queryUser(row.id).then(res => {
-        console.log(res)
+        // console.log(res)
         if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
         this.changeUserFrom = res.data
-        // this.changeUserFrom.email = res.data.email
-        // this.changeUserFrom.mobile = res.data.mobile
       }).catch(err => {
         console.log(err)
       })
+    },
+  //  确定修改用户信息按钮
+    changeUser() {
+    //  表达预验证
+      this.$refs.addUserForm.validate(valid => {
+        // console.log(valid)
+        if (!valid) return Error
+        changeUsers(this.changeUserFrom.id, {
+          email: this.changeUserFrom.email,
+          mobile: this.changeUserFrom.mobile
+        }).then(res => {
+          if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+          this.$message.success(res.meta.msg)
+          this.getUsersList()
+          this.changeUserBox = false
+          // console.log(res)
+        }).catch(err => {
+          console.log(err)
+        })
+      })
+    },
+  //  删除用户
+    async removeUsers(row) {
+      const result = await this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).catch(err => err)
+      // console.log(result)
+      if (result == 'cancel') return this.$message.info('您已取消删除用户！')
+      const { meta: res } = await deleteUser(row.id)
+      // console.log(res)
+      if (res.status !== 200) return this.$message.error(res.msg)
+      this.$message.success(res.msg)
+      this.getUsersList()
     }
   },
   created() {

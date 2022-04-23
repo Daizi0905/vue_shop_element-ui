@@ -1,4 +1,4 @@
-import { Get, Post, Put } from "@/config/axios";
+import { Get, Post, Put, Delete } from "@/config/axios";
 
 // 获取左侧菜单
 export const getMenuList = param => {
@@ -20,4 +20,12 @@ export const addUsers = param => {
 export const queryUser = id => {
     // console.log(id)
     return Get(`users/${id}`)
+}
+// 修改用户信息
+export const changeUsers = (id, param) => {
+    return Put(`users/${id}`, param)
+}
+// 删除用户
+export const deleteUser = id => {
+    return Delete(`users/${id}`)
 }
