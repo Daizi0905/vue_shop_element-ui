@@ -58,3 +58,7 @@ export const deleteRolesRight = (roleID, rightID) => {
 export const allotRolesRight = (roleId, idStr) => {
     return Post(`roles/${roleId}/rights`, idStr)
 }
+// 分配用户角色
+export const changeRole = (id, param) => {
+    return Put(`users/${id}/role`, param)
+}

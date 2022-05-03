@@ -262,7 +262,7 @@ export default {
         ...this.$refs.treeRef.getHalfCheckedKeys()
       ]
       const idStr = keys.join(',')
-      console.log(idStr)
+      // console.log(idStr)
       const { meta: res} = await allotRolesRight(this.allotRoleId, {
         rids: idStr
       })

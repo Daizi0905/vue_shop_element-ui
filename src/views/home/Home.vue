@@ -130,7 +130,7 @@ export default {
     // },
     getMenuList() {
       getMenuList().then(res => {
-          if (res.meta.status !== 200) return this.$message.error('请求菜单栏数据失败！！！')
+          if (res.meta.status !== 200) return
           this.menusList = res.data
         // console.log(res)
       }).catch(err => {

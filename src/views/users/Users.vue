@@ -60,7 +60,7 @@
               <el-button type="primary" icon="el-icon-edit" size="mini" circle @click="changeUsersFrom(scope.row)"></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="分配角色" placement="top" :enterable="false">
-              <el-button type="warning" icon="el-icon-setting" size="mini" circle></el-button>
+              <el-button type="warning" icon="el-icon-setting" size="mini" circle @click="showSetUserRoleBox(scope.row)"></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="删除" placement="top" :enterable="false">
               <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="removeUsers(scope.row)"></el-button>
@@ -126,11 +126,27 @@
     <el-button type="primary" @click="changeUser">确 定</el-button>
   </span>
     </el-dialog>
+<!--    分配角色对话框-->
+    <el-dialog
+        title="修改用户信息"
+        :visible.sync="setUserRoleBox"
+        width="50%"
+    @close="closeSetRoleBox">
+      <p>当前的用户：{{ setUserRoleData.username }}</p>
+      <p>当前的角色：{{ setUserRoleData.role_name }}</p>
+      <el-select v-model="roleId" placeholder="请选择需要更改的管理员">
+        <el-option v-for="i in rolesList" :key="i.id" :label="i.roleName" :value="i.id"></el-option>
+      </el-select>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="setUserRoleBox = false">取 消</el-button>
+    <el-button type="primary" @click="setUserRoleFn">确 定</el-button>
+  </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import {getUsers, userState, addUsers, queryUser, changeUsers, deleteUser} from "@/config/api";
+import {getUsers, userState, addUsers, changeRole, queryUser, changeUsers, deleteUser, getRoles} from "@/config/api";
 
 export default {
   name: "Users",
@@ -149,6 +165,9 @@ export default {
       cb(new Error('请输入合法的手机号码！'))
     }
     return {
+      roleId: null,
+      setUserRoleData: [],
+      setUserRoleBox: false,  // 分配角色对话框
       total: 0, //  总页数
       addUserBox: false,  // 添加用户对话框
       changeUserBox: false,  // 修改用户信息对话框
@@ -158,6 +177,8 @@ export default {
         pagenum: 1, // 当前的页数
         pagesize: 2  // 当前每页显示多少条数据
       },
+      // 角色列表
+      rolesList: [],
       //  用户列表
       userList: [],
       // 添加用户的表单
@@ -165,7 +186,7 @@ export default {
         username: '',
         password: '',
         email: '',
-        mobile: ''
+        // mobile: ''
       },
       // 修改用户信息表单
       changeUserFrom: {},
@@ -194,7 +215,7 @@ export default {
     // 获取用户列表
     getUsersList() {
       getUsers(this.queryInfo).then(res => {
-        if (res.meta.status !== 200) return this.$message.error('用户数据获取失败！！！')
+        if (res.meta.status !== 200) return
         this.userList = res.data.users
         this.total = res.data.total
         // console.log(res.data)
@@ -241,7 +262,7 @@ export default {
         if (!valid) return
         addUsers(this.addUserForm).then(res => {
           // console.log(res)
-          if (res.meta.status !== 201) return this.$message.error(res.meta.msg)
+          if (res.meta.status !== 201) return
           this.$message.success(res.meta.msg)
           this.getUsersList()
           this.addUserBox = false
@@ -297,6 +318,38 @@ export default {
       if (res.status !== 200) return this.$message.error(res.msg)
       this.$message.success(res.msg)
       this.getUsersList()
+    },
+    // 显示分配角色对话框
+    showSetUserRoleBox(row) {
+      console.log(row)
+      this.setUserRoleBox = true
+      this.setUserRoleData = row
+      this.getRolesList()
+    },
+    // 分配角色
+    async setUserRoleFn() {
+      if (!this.roleId) {
+        this.$message.warning('请选择一个新的角色')
+      } else{
+        const res = await changeRole(this.setUserRoleData.id, {
+          rid: this.roleId
+        })
+        if (res.meta.status == 200) {
+          this.$message.success(res.meta.msg)
+          this.setUserRoleBox = false
+          this.getUsersList()
+        }
+        console.log(res)
+      }
+    },
+    // 监听分配角色对话框关闭事件
+    closeSetRoleBox() {
+      this.roleId = null
+    },
+    async getRolesList() {
+      const { data: res } = await getRoles()
+      console.log(res)
+      this.rolesList = res
     }
   },
   created() {
