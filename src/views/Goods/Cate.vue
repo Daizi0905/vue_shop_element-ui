@@ -11,16 +11,7 @@
       <div>
         <el-button type="primary" @click="showAddClassifyDialog">添加分类</el-button>
       </div>
-      <!--     <el-table-->
-      <!--         :data="tableData"-->
-      <!--         style="width: 100%;margin-bottom: 20px;"-->
-      <!--         row-key="id"-->
-      <!--         border-->
-      <!--         default-expand-all-->
-      <!--         :tree-props="{children: 'children', hasChildren: 'hasChildren'}">-->
-
-      <!--     </el-table>-->
-      <el-table :data="tableData" stripe style="width: 100%" row-key="cat_id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+      <el-table :data="tableData" :stripe="true" style="width: 100%" row-key="cat_id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
         <el-table-column type="index" label="#"> </el-table-column>
         <el-table-column prop="cat_name" label="分类名称"> </el-table-column>
         <el-table-column prop="cat_deleted" label="是否有效">
@@ -38,8 +29,8 @@
         </el-table-column>
         <el-table-column label="操作">
           <template #default="scope">
-            <el-button type="primary" icon="el-icon-edit">编辑</el-button>
-            <el-button type="danger" icon="el-icon-delete">删除</el-button>
+            <el-button type="primary" icon="el-icon-edit" @click="showEditClassifyDialog(scope.row)">编辑</el-button>
+            <el-button type="danger" icon="el-icon-delete" @click="deleteClassifyDialog(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -62,17 +53,31 @@
         <el-button type="primary" @click="addClassify">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 编辑对话框 -->
+    <el-dialog title="编辑分类" :visible.sync="editClassifyDialog" width="50%" @close="editClassifyDialogClose">
+      <el-form ref="form" :model="addClassifyForm" label-width="80px">
+        <el-form-item label="分类名称">
+          <el-input v-model="addClassifyForm.cat_name"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="editClassifyDialog = false">取 消</el-button>
+        <el-button type="primary" @click="editClassify">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getGoodsClassify, addCategories } from '@/config/api'
+import { getGoodsClassify, addCategories, editCategories, deleteCategories } from '@/config/api'
 import fa from 'element-ui/src/locale/lang/fa'
 
 export default {
   name: 'Cate',
   data() {
     return {
+      editClassifyDialog: false, // 编辑分类对话框
+      editClassifyDialogId: 0, // 编辑分类的id
       addClassifyDialog: false, // 添加分类对话框
       // 表单列表
       tableData: [],
@@ -106,15 +111,21 @@ export default {
   },
   methods: {
     // 获取商品列表数据
-    async getGoodsClassifyFn(type) {
+    async getGoodsClassifyFn(type = 3) {
+      // let loadingInstance = Loading.service(options)
       const res = await getGoodsClassify({
         type: type,
         pagesize: this.queryInfo.pagesize, // 每页显示多少条数据
         pagenum: this.queryInfo.pagenum // 页数
       })
+      // this.$nextTick(() => {
+      //   // 以服务的方式调用的 Loading 需要异步关闭
+      //   loadingInstance.close()
+      // })
       // console.log( res.data.result )
       // if (res.meta.status == 200) {
       this.tableData = res.data.result
+      // loadingInstance.close();
       this.total = res.data.total
       // }
     },
@@ -162,13 +173,13 @@ export default {
     addClassify() {
       console.log(this.addClassifyForm)
       // console.log(this.addClassifyForm);
-      this.$refs.addClassifyFormRef.validate(async valid => {
-        if(!valid) return
+      this.$refs.addClassifyFormRef.validate(async (valid) => {
+        if (!valid) return
         const res = await addCategories(this.addClassifyForm)
-        console.log(res);
-        if(res.meta.status !== 201) return
+        console.log(res)
+        if (res.meta.status !== 201) return
         this.$message.success('添加分类成功')
-        this.getGoodsClassifyFn()
+        this.getGoodsClassifyFn(3)
         this.addClassifyDialog = false
       })
     },
@@ -177,8 +188,47 @@ export default {
     addClassifyDialogClose() {
       this.addClassifyForm.cat_name = ''
       this.addClassifyForm.cat_level = 0
-      this.addClassifyForm.cat_pid = 0
-      this.addClassifyForm.cat_level = 0
+      this.selectParentId = 0
+    },
+
+    // 展示编辑对话框
+    showEditClassifyDialog(value) {
+      console.log(value)
+      console.log(value.cat_pid)
+      this.editClassifyDialogId = value.cat_id
+      this.editClassifyDialog = true
+    },
+
+    // 提交编辑分类信息
+    async editClassify() {
+      const result = await editCategories(this.editClassifyDialogId, {cat_name: this.addClassifyForm.cat_name})
+      console.log(result);
+      if (result.meta.status !== 200) return
+      this.$message.success('更改成功！')
+      this.editClassifyDialog = false
+      this.getGoodsClassifyFn(3)
+    },
+
+    // 删除分类信息
+    async deleteClassifyDialog(value) {
+      const result = await this.$confirm('此操作将永久删除该信息, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'error'
+      }).catch(err => err)
+      console.log(value.cat_id)
+      // console.log(result)
+      if (result === 'confirm') {
+        const res = await deleteCategories(value.cat_id)
+        // console.log(res)
+        this.getGoodsClassifyFn()
+        this.$message.success('删除成功')
+      }
+    },
+
+    // 监听编辑对话框关闭
+    editClassifyDialogClose(){
+      this.addClassifyForm.cat_name = ''
     }
   },
 
