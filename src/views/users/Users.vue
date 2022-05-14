@@ -57,18 +57,21 @@
             label="操作">
           <template #default="scope">
             <el-tooltip class="item" effect="dark" content="修改" placement="top" :enterable="false">
-              <el-button type="primary" icon="el-icon-edit" size="mini" circle @click="changeUsersFrom(scope.row)"></el-button>
+              <el-button type="primary" icon="el-icon-edit" size="mini" circle
+                         @click="changeUsersFrom(scope.row)"></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="分配角色" placement="top" :enterable="false">
-              <el-button type="warning" icon="el-icon-setting" size="mini" circle @click="showSetUserRoleBox(scope.row)"></el-button>
+              <el-button type="warning" icon="el-icon-setting" size="mini" circle
+                         @click="showSetUserRoleBox(scope.row)"></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="删除" placement="top" :enterable="false">
-              <el-button type="danger" icon="el-icon-delete" size="mini" circle @click="removeUsers(scope.row)"></el-button>
+              <el-button type="danger" icon="el-icon-delete" size="mini" circle
+                         @click="removeUsers(scope.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
-<!--      分页区域-->
+      <!--      分页区域-->
       <el-pagination
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
@@ -79,13 +82,14 @@
           :total="total">
       </el-pagination>
     </el-card>
-<!--   添加用户对话框 -->
+    <!--   添加用户对话框 -->
     <el-dialog
         title="添加用户"
         :visible.sync="addUserBox"
         width="50%"
-    @close="resetForm">
-      <el-form :model="addUserForm" :rules="addUserFormRules" ref="addUserForm" label-width="100px" class="demo-ruleForm">
+        @close="resetForm">
+      <el-form :model="addUserForm" :rules="addUserFormRules" ref="addUserForm" label-width="100px"
+               class="demo-ruleForm">
         <el-form-item label="用户名：" prop="username">
           <el-input v-model="addUserForm.username"></el-input>
         </el-form-item>
@@ -104,13 +108,14 @@
     <el-button type="primary" @click="addUser">确 定</el-button>
   </span>
     </el-dialog>
-<!--    修改用户信息对话框-->
+    <!--    修改用户信息对话框-->
     <el-dialog
         title="修改用户信息"
         :visible.sync="changeUserBox"
         width="50%"
         @close="resetForm">
-      <el-form :model="changeUserFrom" :rules="addUserFormRules" ref="addUserForm" label-width="100px" class="demo-ruleForm">
+      <el-form :model="changeUserFrom" :rules="addUserFormRules" ref="addUserForm" label-width="100px"
+               class="demo-ruleForm">
         <el-form-item label="用户名：">
           <el-input v-model="changeUserFrom.username" disabled></el-input>
         </el-form-item>
@@ -126,12 +131,12 @@
     <el-button type="primary" @click="changeUser">确 定</el-button>
   </span>
     </el-dialog>
-<!--    分配角色对话框-->
+    <!--    分配角色对话框-->
     <el-dialog
         title="修改用户信息"
         :visible.sync="setUserRoleBox"
         width="50%"
-    @close="closeSetRoleBox">
+        @close="closeSetRoleBox">
       <p>当前的用户：{{ setUserRoleData.username }}</p>
       <p>当前的角色：{{ setUserRoleData.role_name }}</p>
       <el-select v-model="roleId" placeholder="请选择需要更改的管理员">
@@ -146,23 +151,23 @@
 </template>
 
 <script>
-import {getUsers, userState, addUsers, changeRole, queryUser, changeUsers, deleteUser, getRoles} from "@/config/api";
+import { getUsers, userState, addUsers, changeRole, queryUser, changeUsers, deleteUser, getRoles } from "@/config/api";
 
 export default {
   name: "Users",
-  data() {
+  data () {
     // 邮箱验证
     var checkEmail = (rules, value, cb) => {
       // 验证邮箱的正则表达式
       const regEmail = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-])+/
-      if (regEmail.test(value)) return cb()
-      cb(new Error('请输入合法的邮箱！'))
+      if (regEmail.test( value )) return cb()
+      cb( new Error( '请输入合法的邮箱！' ) )
     }
     // 手机号码验证
     var checkMobile = (rules, value, cb) => {
       const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
-      if (regMobile.test(value)) return cb()
-      cb(new Error('请输入合法的手机号码！'))
+      if (regMobile.test( value )) return cb()
+      cb( new Error( '请输入合法的手机号码！' ) )
     }
     return {
       roleId: null,
@@ -213,146 +218,146 @@ export default {
   },
   methods: {
     // 获取用户列表
-    getUsersList() {
-      getUsers(this.queryInfo).then(res => {
+    getUsersList () {
+      getUsers( this.queryInfo ).then( res => {
         if (res.meta.status !== 200) return
         this.userList = res.data.users
         this.total = res.data.total
         // console.log(res.data)
-      }).catch(err => {
-        console.log(err)
-      })
+      } ).catch( err => {
+        console.log( err )
+      } )
     },
     // 监听pageSize(每页显示几条数据)改变的事件
-    handleSizeChange(newSize) {
+    handleSizeChange (newSize) {
       // console.log(newSize)
       // 获取最新的pageSize，重新发起数据请求
       this.queryInfo.pagesize = newSize
       this.getUsersList()
     },
-  //  监听页码的改变
-    handleCurrentChange(newPage) {
+    //  监听页码的改变
+    handleCurrentChange (newPage) {
       // console.log(newPage)
       this.queryInfo.pagenum = newPage
       this.getUsersList()
     },
     // 监听状态开关的改变
-    userStateChange(row) {
+    userStateChange (row) {
       // console.log(row)
-      userState(row.id, row.mg_state).then(res => {
+      userState( row.id, row.mg_state ).then( res => {
         if (res.meta.status !== 200) {
           // 若是更新用户状态失败，则修改回按钮原来的状态
           row.mg_state = !row.mg_state
-          return this.$message.error('更新用户状态失败！！！')
+          return this.$message.error( '更新用户状态失败！！！' )
         }
-        this.$message.success('更新用户状态成功！')
+        this.$message.success( '更新用户状态成功！' )
         // console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
+      } ).catch( err => {
+        console.log( err )
+      } )
     },
     // 添加用户取消按钮
-    resetForm() {
+    resetForm () {
       this.$refs.addUserForm.resetFields()
     },
-  //  添加用户确定按钮
-    addUser() {
-      this.$refs.addUserForm.validate(valid => {
+    //  添加用户确定按钮
+    addUser () {
+      this.$refs.addUserForm.validate( valid => {
         // console.log(valid)
         if (!valid) return
-        addUsers(this.addUserForm).then(res => {
+        addUsers( this.addUserForm ).then( res => {
           // console.log(res)
           if (res.meta.status !== 201) return
-          this.$message.success(res.meta.msg)
+          this.$message.success( res.meta.msg )
           this.getUsersList()
           this.addUserBox = false
-        }).catch(err => {
-          console.log(err)
-        })
-      })
+        } ).catch( err => {
+          console.log( err )
+        } )
+      } )
     },
-  //  修改用户信息表单
-    changeUsersFrom(row) {
+    //  修改用户信息表单
+    changeUsersFrom (row) {
       this.changeUserBox = true
       // console.log(row.id)
       // 通过id发送数据请求
-      queryUser(row.id).then(res => {
+      queryUser( row.id ).then( res => {
         // console.log(res)
-        if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+        if (res.meta.status !== 200) return this.$message.error( res.meta.msg )
         this.changeUserFrom = res.data
-      }).catch(err => {
-        console.log(err)
-      })
+      } ).catch( err => {
+        console.log( err )
+      } )
     },
-  //  确定修改用户信息按钮
-    changeUser() {
-    //  表达预验证
-      this.$refs.addUserForm.validate(valid => {
+    //  确定修改用户信息按钮
+    changeUser () {
+      //  表达预验证
+      this.$refs.addUserForm.validate( valid => {
         // console.log(valid)
         if (!valid) return Error
-        changeUsers(this.changeUserFrom.id, {
+        changeUsers( this.changeUserFrom.id, {
           email: this.changeUserFrom.email,
           mobile: this.changeUserFrom.mobile
-        }).then(res => {
-          if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
-          this.$message.success(res.meta.msg)
+        } ).then( res => {
+          if (res.meta.status !== 200) return this.$message.error( res.meta.msg )
+          this.$message.success( res.meta.msg )
           this.getUsersList()
           this.changeUserBox = false
           // console.log(res)
-        }).catch(err => {
-          console.log(err)
-        })
-      })
+        } ).catch( err => {
+          console.log( err )
+        } )
+      } )
     },
-  //  删除用户
-    async removeUsers(row) {
-      const result = await this.$confirm('此操作将永久删除该用户, 是否继续?', '提示', {
+    //  删除用户
+    async removeUsers (row) {
+      const result = await this.$confirm( '此操作将永久删除该用户, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).catch(err => err)
+      } ).catch( err => err )
       // console.log(result)
-      if (result == 'cancel') return this.$message.info('您已取消删除用户！')
-      const { meta: res } = await deleteUser(row.id)
+      if (result == 'cancel') return this.$message.info( '您已取消删除用户！' )
+      const { meta: res } = await deleteUser( row.id )
       // console.log(res)
-      if (res.status !== 200) return this.$message.error(res.msg)
-      this.$message.success(res.msg)
+      if (res.status !== 200) return this.$message.error( res.msg )
+      this.$message.success( res.msg )
       this.getUsersList()
     },
     // 显示分配角色对话框
-    showSetUserRoleBox(row) {
-      console.log(row)
+    showSetUserRoleBox (row) {
+      console.log( row )
       this.setUserRoleBox = true
       this.setUserRoleData = row
       this.getRolesList()
     },
     // 分配角色
-    async setUserRoleFn() {
+    async setUserRoleFn () {
       if (!this.roleId) {
-        this.$message.warning('请选择一个新的角色')
-      } else{
-        const res = await changeRole(this.setUserRoleData.id, {
+        this.$message.warning( '请选择一个新的角色' )
+      } else {
+        const res = await changeRole( this.setUserRoleData.id, {
           rid: this.roleId
-        })
+        } )
         if (res.meta.status == 200) {
-          this.$message.success(res.meta.msg)
+          this.$message.success( res.meta.msg )
           this.setUserRoleBox = false
           this.getUsersList()
         }
-        console.log(res)
+        console.log( res )
       }
     },
     // 监听分配角色对话框关闭事件
-    closeSetRoleBox() {
+    closeSetRoleBox () {
       this.roleId = null
     },
-    async getRolesList() {
+    async getRolesList () {
       const { data: res } = await getRoles()
-      console.log(res)
+      console.log( res )
       this.rolesList = res
     }
   },
-  created() {
+  created () {
     this.getUsersList()
   }
 }

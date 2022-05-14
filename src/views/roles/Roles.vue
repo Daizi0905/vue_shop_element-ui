@@ -130,11 +130,11 @@
 </template>
 
 <script>
-import {getRoles, addRoles, editRoles, deleteRoles, deleteRolesRight, getRights, allotRolesRight} from "@/config/api";
+import { getRoles, addRoles, editRoles, deleteRoles, deleteRolesRight, getRights, allotRolesRight } from "@/config/api";
 
 export default {
   name: "Roles",
-  data() {
+  data () {
     return {
       setRightDialog: false,  // 分配权限
       addRolesBox: false,  // 添加角色盒子
@@ -166,115 +166,115 @@ export default {
   },
   methods: {
     // 获取角色列表
-    async getRolesList() {
+    async getRolesList () {
       const res = await getRoles()
       // console.log(res)
-      if (res.meta.status !== 200) return this.$message.error(res.meta.status)
+      if (res.meta.status !== 200) return this.$message.error( res.meta.status )
       this.rolesList = res.data
     },
     // 关闭添加对话框就重置表单
-    resetForm() {
+    resetForm () {
       this.$refs.addRolesForm.resetFields()
     },
     // 确定添加角色
-    async addURoles() {
-      const res = await addRoles(this.addRolesForm)
-      if (res.meta.status !== 201) return this.$message.error(res.meta.msg)
-      this.$message.success(res.meta.msg)
+    async addURoles () {
+      const res = await addRoles( this.addRolesForm )
+      if (res.meta.status !== 201) return this.$message.error( res.meta.msg )
+      this.$message.success( res.meta.msg )
       this.addRolesBox = false
-      console.log(res)
+      console.log( res )
       this.getRolesList()
     },
     // 编辑角色信息
-    changeRolesData(row) {
+    changeRolesData (row) {
       this.editRolesBox = true
       // console.log(row)
       this.editRolesForm = row
     },
     // 确定编辑角色
-    async editURolesEnter() {
-      const {meta: res} = await editRoles(this.editRolesForm.id, this.editRolesForm)
-      console.log(res)
-      if (res.status !== 200) return this.$message.error(res.msg)
-      this.$message.success('修改信息提交成功！')
+    async editURolesEnter () {
+      const { meta: res } = await editRoles( this.editRolesForm.id, this.editRolesForm )
+      console.log( res )
+      if (res.status !== 200) return this.$message.error( res.msg )
+      this.$message.success( '修改信息提交成功！' )
       this.editRolesBox = false
       this.getRolesList()
     },
     // 删除角色
-    async removeRoles(id) {
-      const result = await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+    async removeRoles (id) {
+      const result = await this.$confirm( '此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).catch(err => err)
-      if (result !== 'confirm') return this.$message('您取消了删除！')
-      const res = await deleteRoles(id)
-      console.log(res)
-      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
-      this.$message.success(res.meta.msg)
+      } ).catch( err => err )
+      if (result !== 'confirm') return this.$message( '您取消了删除！' )
+      const res = await deleteRoles( id )
+      console.log( res )
+      if (res.meta.status !== 200) return this.$message.error( res.meta.msg )
+      this.$message.success( res.meta.msg )
       this.getRolesList()
     },
     // 移除第三层权限
-    async removeRolesRight(role, rightID) {
+    async removeRolesRight (role, rightID) {
       // console.log(role, rightID)
-      const result = await this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+      const result = await this.$confirm( '此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).catch(err => err)
+      } ).catch( err => err )
       // console.log(result)
-      if (result !== 'confirm') return this.$message('您取消了删除!')
-      const res = await deleteRolesRight(role.id, rightID)
+      if (result !== 'confirm') return this.$message( '您取消了删除!' )
+      const res = await deleteRolesRight( role.id, rightID )
       // console.log(res)
-      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
-      this.$message.success(res.meta.msg)
+      if (res.meta.status !== 200) return this.$message.error( res.meta.msg )
+      this.$message.success( res.meta.msg )
       role.children = res.data
       // this.getRolesList()
     },
     //  分配权限对话框
-    async showSetRightDialog(row) {
+    async showSetRightDialog (row) {
       this.allotRoleId = row.id
-      const res = await getRights('tree')
-      if (res.meta.status !== 200) return this.$message.error(res.meta.msg)
+      const res = await getRights( 'tree' )
+      if (res.meta.status !== 200) return this.$message.error( res.meta.msg )
       // console.log(res)
       this.rightsList = res.data
       this.setRightDialog = true
-      this.getDefaultNodeId(row, this.defaultKey)
-      console.log(row)
+      this.getDefaultNodeId( row, this.defaultKey )
+      console.log( row )
     },
     // 获取该角色已拥有的权限的id
-    getDefaultNodeId(node, arr) {
+    getDefaultNodeId (node, arr) {
       // 如果该节点没有 children 属性, 则将该节点的id添加到数组中
-      if (!node.children) return arr.push(node.id)
-      node.children.forEach(item => {
-        this.getDefaultNodeId(item, arr)
-      })
+      if (!node.children) return arr.push( node.id )
+      node.children.forEach( item => {
+        this.getDefaultNodeId( item, arr )
+      } )
     },
     // 分配权限管理对话框关闭重置树形结构
-    resetRightDialog() {
+    resetRightDialog () {
       this.defaultKey = []
     },
     // 确定分配权限
-    async allotRight() {
+    async allotRight () {
       // 获取已选中节点的id
       const keys = [
         ...this.$refs.treeRef.getCheckedKeys(),
         ...this.$refs.treeRef.getHalfCheckedKeys()
       ]
-      const idStr = keys.join(',')
+      const idStr = keys.join( ',' )
       // console.log(idStr)
-      const { meta: res} = await allotRolesRight(this.allotRoleId, {
+      const { meta: res } = await allotRolesRight( this.allotRoleId, {
         rids: idStr
-      })
-      console.log(res)
-      if (res.status !== 200) return this.$message.error(res.msg)
-      this.$message.success(res.msg)
+      } )
+      console.log( res )
+      if (res.status !== 200) return this.$message.error( res.msg )
+      this.$message.success( res.msg )
       this.setRightDialog = false
       // this.allotRoleId = ''
       this.getRolesList()
     }
   },
-  created() {
+  created () {
     this.getRolesList()
   }
 }

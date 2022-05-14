@@ -4,6 +4,12 @@ import router from './router'
 import './plugins/element.js'
 import './assets/css/global.css'
 
+// import Vue from 'vue'
+import ZkTable from 'vue-table-with-tree-grid'
+
+Vue.use(ZkTable)
+// Vue.component(ZkTable.name, ZkTable)
+
 import axios from 'axios'
 import {Message} from "element-ui";
 axios.defaults.baseURL = 'https://lianghj.top:8888/api/private/v1/'
