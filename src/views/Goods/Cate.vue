@@ -1,11 +1,11 @@
 <template>
   <div>
     <!--  面包屑-->
-    <el-breadcrumb separator="/">
+    <!-- <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item><a href="/">商品管理</a></el-breadcrumb-item>
-      <el-breadcrumb-item>用户列表</el-breadcrumb-item>
-    </el-breadcrumb>
+      <el-breadcrumb-item>商品分类</el-breadcrumb-item>
+    </el-breadcrumb> -->
     <!--   卡片视图-->
     <el-card>
       <div>

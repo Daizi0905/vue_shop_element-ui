@@ -1,48 +1,48 @@
 <template>
-<!--  <div  class="home_view">-->
-<!--    <el-container class="home_view">-->
-<!--      <el-header>-->
-<!--              <div class="logo">-->
-<!--                <img src="../../assets/logo.png" width="60px" alt="" style="margin-right: 20px;">-->
-<!--                <span>电商后台管理系统</span>-->
-<!--              </div>-->
-<!--              <el-button type="info" @click="logout">退出</el-button>-->
-<!--      </el-header>-->
-<!--      <el-container>-->
-<!--        <el-aside width="200px">Aside</el-aside>-->
-<!--        <el-main>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--          <h1>Main</h1>-->
-<!--        </el-main>-->
-<!--      </el-container>-->
-<!--    </el-container>-->
-<!--  </div>-->
+  <!--  <div  class="home_view">-->
+  <!--    <el-container class="home_view">-->
+  <!--      <el-header>-->
+  <!--              <div class="logo">-->
+  <!--                <img src="../../assets/logo.png" width="60px" alt="" style="margin-right: 20px;">-->
+  <!--                <span>电商后台管理系统</span>-->
+  <!--              </div>-->
+  <!--              <el-button type="info" @click="logout">退出</el-button>-->
+  <!--      </el-header>-->
+  <!--      <el-container>-->
+  <!--        <el-aside width="200px">Aside</el-aside>-->
+  <!--        <el-main>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--          <h1>Main</h1>-->
+  <!--        </el-main>-->
+  <!--      </el-container>-->
+  <!--    </el-container>-->
+  <!--  </div>-->
 
   <el-container class="home_view">
     <!--      Header-->
     <el-header>
       <div class="logo">
-        <img src="../../assets/logo.png" width="60px" alt="" style="margin-right: 20px;">
+        <img src="../../assets/logo.png" width="60px" alt="" style="margin-right: 20px" />
         <span>电商后台管理系统</span>
       </div>
       <el-button type="info" @click="logout">退出</el-button>
@@ -52,19 +52,7 @@
       <el-aside :width="isCollapse ? '60px' : '200px'">
         <div class="toggle_button" @click="toggleCollapse">|||</div>
         <!--          左侧导航栏-->
-        <el-menu
-            default-active="2"
-            class="el-menu-vertical-demo"
-            @open="handleOpen"
-            @close="handleClose"
-            background-color="#333744"
-            text-color="#fff"
-            active-text-color="#409eff"
-            unique-opened
-            :collapse="isCollapse"
-            :collapse-transition="false"
-            router
-        :default-active="$route.path">
+        <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" background-color="#333744" text-color="#fff" active-text-color="#409eff" unique-opened :collapse="isCollapse" :collapse-transition="false" router :default-active="$route.path">
           <!--            一级菜单-->
           <el-submenu v-for="item in menusList" :key="item.id" :index="String(item.id)">
             <template slot="title">
@@ -83,6 +71,9 @@
       </el-aside>
       <!--        Main-->
       <el-main>
+        <el-breadcrumb separator="/">
+          <el-breadcrumb-item v-for="(item, index) in menusRoute" :key="index" :to="{ path: item.path }">{{ item.title }}</el-breadcrumb-item>
+        </el-breadcrumb>
         <router-view></router-view>
       </el-main>
     </el-container>
@@ -90,23 +81,34 @@
 </template>
 
 <script>
-import { getMenuList } from "@/config/api";
+import { getMenuList } from '@/config/api'
 
 export default {
-  name: "Home",
+  name: 'Home',
   data() {
     return {
       menusList: [], // 左侧菜单列表
       iconList: {
-        '125': 'el-icon-user-solid',
-        '103': 'el-icon-set-up',
-        '101': 'el-icon-s-goods',
-        '102': 'el-icon-s-platform',
-        '145': 'el-icon-s-platform'
+        125: 'el-icon-user-solid',
+        103: 'el-icon-set-up',
+        101: 'el-icon-s-goods',
+        102: 'el-icon-s-platform',
+        145: 'el-icon-s-platform'
       },
-      isCollapse: true
+      isCollapse: true,
+      menusRoute: []
     }
   },
+
+  watch: {
+    $route(to, from) {
+      console.log(to)
+      if (to.meta.level) {
+        this.menusRoute = to.meta.level
+      }
+    }
+  },
+
   methods: {
     // 退出登录
     logout() {
@@ -114,12 +116,21 @@ export default {
       this.$message.success('您已退出登录！')
       this.$router.push('/login')
     },
+
+    // 获取当前页面路由
+    getPageRoute() {
+      console.log(this.$route)
+      if (this.$route.meta.level) {
+        this.menusRoute = this.$route.meta.level
+      }
+    },
+
     // 点击左侧菜单栏
     handleOpen(key, keyPath) {
-      console.log(key, keyPath);
+      console.log(key, keyPath)
     },
     handleClose(key, keyPath) {
-      console.log(key, keyPath);
+      console.log(key, keyPath)
     },
     // 请求左侧菜单数据
     // async getMenuList() {
@@ -129,13 +140,15 @@ export default {
     //   this.menusList = res.data
     // },
     getMenuList() {
-      getMenuList().then(res => {
+      getMenuList()
+        .then((res) => {
           if (res.meta.status !== 200) return
           this.menusList = res.data
-        // console.log(res)
-      }).catch(err => {
-        console.log(err)
-      })
+          // console.log(res)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
     //  左侧菜单的切换收起
     toggleCollapse() {
@@ -144,6 +157,7 @@ export default {
   },
   created() {
     this.getMenuList()
+    this.getPageRoute()
   }
 }
 </script>
@@ -153,7 +167,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #373d41
+  background: #373d41;
 }
 
 .el-aside {

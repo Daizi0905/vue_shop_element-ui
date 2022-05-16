@@ -1,32 +1,18 @@
 <template>
   <div>
     <!--  面包屑-->
-    <el-breadcrumb separator="/">
+    <!-- <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item><a href="/">权限管理</a></el-breadcrumb-item>
       <el-breadcrumb-item>权限列表</el-breadcrumb-item>
-    </el-breadcrumb>
-<!--    卡片-->
+    </el-breadcrumb> -->
+    <!--    卡片-->
     <el-card>
-      <el-table
-          :data="rightsList"
-          stripe
-          style="width: 100%">
-        <el-table-column
-        type="index"
-        label="#">
-        </el-table-column>
-        <el-table-column
-            prop="authName"
-            label="权限名称">
-        </el-table-column>
-        <el-table-column
-            prop="path"
-            label="路径">
-        </el-table-column>
-        <el-table-column
-            prop="level"
-            label="权限等级">
+      <el-table :data="rightsList" stripe style="width: 100%">
+        <el-table-column type="index" label="#"> </el-table-column>
+        <el-table-column prop="authName" label="权限名称"> </el-table-column>
+        <el-table-column prop="path" label="路径"> </el-table-column>
+        <el-table-column prop="level" label="权限等级">
           <template #default="scope">
             <el-tag v-if="scope.row.level == 0">一级</el-tag>
             <el-tag v-else-if="scope.row.level == 1" type="success">二级</el-tag>
@@ -39,22 +25,22 @@
 </template>
 
 <script>
-import { getRights } from "@/config/api";
+import { getRights } from '@/config/api'
 
 export default {
-  name: "Rights",
+  name: 'Rights',
   data() {
     return {
       rightsList: []
     }
   },
   methods: {
-      async getRightsList() {
-        const res = await getRights('list')
-        console.log(res.data)
-        if (res.meta.status !== 200) return this.$message.error('请求管理权限列表失败！！！')
-        this.rightsList = res.data
-      }
+    async getRightsList() {
+      const res = await getRights('list')
+      console.log(res.data)
+      if (res.meta.status !== 200) return this.$message.error('请求管理权限列表失败！！！')
+      this.rightsList = res.data
+    }
   },
   created() {
     this.getRightsList()
