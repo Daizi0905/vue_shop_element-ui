@@ -85,6 +85,27 @@ const router = new VueRouter({
             title: '商品分类',
             level: [{ path: '/welcome', title: '首页' }, { title: '商品管理' }, { title: '参数列表' }]
           }
+        },
+        // 商品列表
+        {
+          // C:\Users\He\Desktop\Code\vue_shop\src\views\goodsList\GoodsList.vue
+          path: '/goods',
+          name: 'goods_list',
+          component: () => import('../views/goodsList/GoodsList.vue'),
+          meta: {
+            title: '商品列表',
+            level: [{ path: '/welcome', title: '首页' }, { title: '商品管理' }, { title: '商品列表' }]
+          }
+        },
+        // 添加商品列表
+        {
+          path: '/addGoods',
+          name: 'addGoods',
+          component: () => import('../views/addGoods/AddGoods.vue'),
+          meta: {
+            title: '添加商品',
+            level: [{ path: '/welcome', title: '首页' }, { title: '商品管理' }, { path: '/goods', title: '商品列表' }, { title: '添加商品' }]
+          }
         }
       ]
     }

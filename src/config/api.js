@@ -100,3 +100,13 @@ export const removeCategories = (id, attrid) => {
 export const editSubmitParams = (id, attrId, params) => {
   return Put(`categories/${id}/attributes/${attrId}`, params)
 }
+
+// 商品列表
+// 获取商品列表数据
+export const getGoodsList = (params) => {
+    return Get('goods', params)
+}
+// 删除商品 goods/:id
+export const deleteGoods = id => {
+    return Delete(`goods/${id}`)
+}

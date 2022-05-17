@@ -16,3 +16,13 @@ body,
 .el-pagination {
     margin-top: 20px;
 }
+
+/* 步骤条 */
+.el-steps {
+    display: flex;
+    justify-content: center;
+    margin: 25px 0;
+  }
+.el-step__title {
+    font-size: 13px;
+}
