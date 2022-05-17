@@ -34,7 +34,7 @@
                   </el-col>
                   <el-col :span="18">
                     <!--                    三级权限-->
-                    <el-tag type="warning" closable v-for="(item3, index3) in item2.children" :key="item3.id" @close="removeRolesRight(scope.row, item3.id)">{{ item3.authName }} </el-tag>
+                    <el-tag type="warning" closable v-for="(item3) in item2.children" :key="item3.id" @close="removeRolesRight(scope.row, item3.id)">{{ item3.authName }} </el-tag>
                   </el-col>
                 </el-row>
               </el-col>
