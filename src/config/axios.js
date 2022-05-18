@@ -12,6 +12,8 @@ axios.defaults.withCredentials = false
 
 // 请求拦截
 axios.interceptors.request.use(config => {
+    // 设置请求头
+    config.headers.Authorization = localStorage.getItem('token')
     return config
 })
 

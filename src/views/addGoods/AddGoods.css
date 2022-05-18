@@ -1,0 +1,6 @@
+.el-checkbox {
+  margin: 0 10px 0 0;
+}
+.el-button+.el-button, .el-checkbox.is-bordered+.el-checkbox.is-bordered {
+  margin-right: 10px;
+}

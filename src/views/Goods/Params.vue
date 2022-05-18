@@ -87,7 +87,7 @@ export default {
         // emitPath: true,
         expandTrigger: 'hover',
         label: 'cat_name',
-        value: 'cat_pid'
+        value: 'cat_id'
       },
       activeName: 'many', // 当前的t|ab
       btnDisabled: true, // 添加按钮的状态
