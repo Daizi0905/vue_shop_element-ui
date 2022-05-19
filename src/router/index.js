@@ -106,6 +106,16 @@ const router = new VueRouter({
             title: '添加商品',
             level: [{ path: '/welcome', title: '首页' }, { title: '商品管理' }, { path: '/goods', title: '商品列表' }, { title: '添加商品' }]
           }
+        },
+        // 订单管理列表
+        {
+          path: '/orders',
+          name: 'orders',
+          component: () => import('../views/order/orders.vue'),
+          meta: {
+            title: '订单列表',
+            level: [{ path: '/welcome', title: '首页' }, { title: '订单管理' }, { title: '订单列表' }]
+          }
         }
       ]
     }

@@ -114,3 +114,12 @@ export const deleteGoods = (id) => {
 export const addGoods = (params) => {
   return Post('goods', params)
 }
+
+// 订单管理
+export const getOrdersList = params => {
+  return Get('orders', params)
+}
+// 查询物流信息
+export const queryProgress = id => {
+  return Get(`/kuaidi/${id}`)
+}
