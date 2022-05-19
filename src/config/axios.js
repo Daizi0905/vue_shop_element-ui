@@ -4,6 +4,10 @@ import axios from "axios";
 import router from "@/router";
 import fa from "element-ui/src/locale/lang/fa";
 
+// 导入NProgress对应的文件，加载进度条
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
 axios.defaults.baseURL = 'https://lianghj.top:8888/api/private/v1/'
 
 axios.defaults.timeout = 30000
@@ -14,11 +18,13 @@ axios.defaults.withCredentials = false
 axios.interceptors.request.use(config => {
     // 设置请求头
     config.headers.Authorization = localStorage.getItem('token')
+    NProgress.start()
     return config
 })
 
 // 响应拦截
 axios.interceptors.response.use(response => {
+    NProgress.done()
     return response
 })
 

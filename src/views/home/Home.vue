@@ -6,7 +6,19 @@
         <img src="../../assets/logo.png" width="60px" alt="" style="margin-right: 20px" />
         <span>电商后台管理系统</span>
       </div>
-      <el-button type="info" @click="logout">退出</el-button>
+      <div class="right">
+        <div>
+          <img src="../../assets/images/header.jpg" width="40px" alt="" />
+        </div>
+        <span>Daizi</span>
+        <el-dropdown>
+          <span class="el-dropdown-link"> 源码地址 <i class="el-icon-arrow-down el-icon--right"></i> </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item><a href="https://gitee.com/daizi0905/vue_shop">Gitee</a></el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <el-button type="info" @click="logout">退出</el-button>
+      </div>
     </el-header>
     <el-container>
       <!--        Aside-->
@@ -164,5 +176,18 @@ export default {
   text-align: center;
   letter-spacing: 0.3em;
   cursor: pointer;
+}
+.right {
+  display: flex;
+  align-items: center;
+}
+.right img {
+  margin-right: 10px;
+  vertical-align: middle;
+}
+.right span {
+  margin-right: 30px;
+  color: #ffffff;
+  font-weight: 700;
 }
 </style>
