@@ -116,6 +116,20 @@ const router = new VueRouter({
             title: '订单列表',
             level: [{ path: '/welcome', title: '首页' }, { title: '订单管理' }, { title: '订单列表' }]
           }
+        },
+        // 数据报表
+        {
+          path: '/reports',
+          name: 'reports',
+          component: () => import('../views/report/Report.vue'),
+          meta: {
+            title: '数据报表',
+            level: [
+              {path: '/welcome', title: '首页'},
+              {title: '数据统计'},
+              {title: '数据报表'}
+            ]
+          }
         }
       ]
     }

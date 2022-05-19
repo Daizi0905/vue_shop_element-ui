@@ -123,3 +123,8 @@ export const getOrdersList = params => {
 export const queryProgress = id => {
   return Get(`/kuaidi/${id}`)
 }
+
+// 基于时间统计的折线图 reports/type/1
+export const getReports = () => {
+  return Get('reports/type/1')
+}
