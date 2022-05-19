@@ -12,9 +12,10 @@
         </div>
         <span>Daizi</span>
         <el-dropdown>
-          <span class="el-dropdown-link"> 源码地址 <i class="el-icon-arrow-down el-icon--right"></i> </span>
+          <span class="el-dropdown-link" style="font-size: 12px; font-weight: 400; color: #4a5064; cursor: pointer;"> 源码地址 <i class="el-icon-arrow-down el-icon--right"></i> </span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item><a href="https://gitee.com/daizi0905/vue_shop">Gitee</a></el-dropdown-item>
+            <el-dropdown-item><a href="https://github.com/Daizi0905/vue_shop_element-ui">Github</a></el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <el-button type="info" @click="logout">退出</el-button>
@@ -189,5 +190,9 @@ export default {
   margin-right: 30px;
   color: #ffffff;
   font-weight: 700;
+}
+.el-dropdown-item a {
+  font-size: 12px;
+  // color: #4e556b;
 }
 </style>
