@@ -15,7 +15,7 @@ module.exports = defineConfig({
         lodash: '_',
         echarts: 'echarts',
         nprogress: 'NProgress',
-        'vue-quill-editor': 'VueQuillEditor',
+        // 'vue-quill-editor': 'VueQuillEditor',
         jquery: '$'
       })
 

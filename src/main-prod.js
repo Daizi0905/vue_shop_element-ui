@@ -19,13 +19,13 @@ import ZkTable from 'vue-table-with-tree-grid'
 // 导入富文本编辑器
 import VueQuillEditor from 'vue-quill-editor'
 // 导入富文本编辑器对应样式
-// import 'quill/dist/quill.core.css' // import styles
-// import 'quill/dist/quill.snow.css' // for snow theme
-// import 'quill/dist/quill.bubble.css' // for bubble theme
+import 'quill/dist/quill.core.css' // import styles
+import 'quill/dist/quill.snow.css' // for snow theme
+import 'quill/dist/quill.bubble.css' // for bubble theme
 
 
 // test
-Vue.use(axios)
+Vue.prototype.axios = axios
 Vue.use(NProgress)
 Vue.use(echarts)
 Vue.use(_)

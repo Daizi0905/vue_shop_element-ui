@@ -1,13 +1,22 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Login from '@/views/login/Login.vue'
-import Home from '@/views/home/Home.vue'
-import Welcome from '@/views/welcome/Welcome'
-import Users from '@/views/users/Users'
-import Rights from '@/views/rights/Rights.vue'
-import Roles from '@/views/roles/Roles'
-import Cate from '@/views/Goods/Cate'
-import Params from '@/views/Goods/Params'
+// import VueRouter from 'vue-router'
+
+// import Login from '@/views/login/Login.vue'
+// import Home from '@/views/home/Home.vue'
+// import Welcome from '@/views/welcome/Welcome'
+// import Users from '@/views/users/Users'
+// import Rights from '@/views/rights/Rights.vue'
+// import Roles from '@/views/roles/Roles'
+// import Cate from '@/views/Goods/Cate'
+// import Params from '@/views/Goods/Params'
+const Login = () => import(/* webpackChunkName: "login_home_welcome" */ '@/views/login/Login.vue')
+const Home = () => import(/* webpackChunkName: "login_home_welcome" */ '@/views/home/Home.vue')
+const Welcome = () => import(/* webpackChunkName: "login_home_welcome" */ '@/views/welcome/Welcome')
+const Users = () => import(/* webpackChunkName: "group-user" */ '@/views/users/Users')
+const Rights = () => import(/* webpackChunkName: "group-user" */ '@/views/rights/Rights.vue')
+const Roles = () => import(/* webpackChunkName: "group-user" */ '@/views/roles/Roles.vue')
+const Cate = () => import(/* webpackChunkName: "cate_params" */ '@/views/Goods/Cate.vue')
+const Params = () => import(/* webpackChunkName: "cate_params" */ '@/views/Goods/Params.vue')
 
 Vue.use(VueRouter)
 
@@ -91,7 +100,7 @@ const router = new VueRouter({
           // C:\Users\He\Desktop\Code\vue_shop\src\views\goodsList\GoodsList.vue
           path: '/goods',
           name: 'goods_list',
-          component: () => import('../views/goodsList/GoodsList.vue'),
+          component: () => import(/* webpackChunkName: "good_list" */ '../views/goodsList/GoodsList.vue'),
           meta: {
             title: '商品列表',
             level: [{ path: '/welcome', title: '首页' }, { title: '商品管理' }, { title: '商品列表' }]
@@ -101,7 +110,7 @@ const router = new VueRouter({
         {
           path: '/addGoods',
           name: 'addGoods',
-          component: () => import('../views/addGoods/AddGoods.vue'),
+          component: () => import(/* webpackChunkName: "good_list" */ '../views/addGoods/AddGoods.vue'),
           meta: {
             title: '添加商品',
             level: [{ path: '/welcome', title: '首页' }, { title: '商品管理' }, { path: '/goods', title: '商品列表' }, { title: '添加商品' }]
@@ -111,7 +120,7 @@ const router = new VueRouter({
         {
           path: '/orders',
           name: 'orders',
-          component: () => import('../views/order/orders.vue'),
+          component: () => import(/* webpackChunkName: "good_list" */ '../views/order/orders.vue'),
           meta: {
             title: '订单列表',
             level: [{ path: '/welcome', title: '首页' }, { title: '订单管理' }, { title: '订单列表' }]

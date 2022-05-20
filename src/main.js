@@ -13,6 +13,7 @@ import * as echarts from 'echarts'
 import _ from 'lodash'
 
 
+
 // import Vue from 'vue'
 import ZkTable from 'vue-table-with-tree-grid'
 
@@ -24,7 +25,8 @@ import 'quill/dist/quill.snow.css' // for snow theme
 import 'quill/dist/quill.bubble.css' // for bubble theme
 
 // test
-Vue.use(axios)
+// Vue.use(axios)
+Vue.prototype.axios = axios
 Vue.use(NProgress)
 Vue.use(echarts)
 Vue.use(_)
@@ -35,25 +37,6 @@ Vue.use(ZkTable)
 Vue.use(VueQuillEditor)
 
 
-// import {Message} from "element-ui";
-// axios.defaults.baseURL = 'https://lianghj.top:8888/api/private/v1/'
-// Vue.prototype.axios = axios
-// // axios 请求拦截器
-// axios.interceptors.request.use(config => {
-//   // console.log(config)
-//   // 请求头设置
-//   config.headers.Authorization = localStorage.getItem('token')
-//   return config
-// })
-// // axios 响应拦截器
-// axios.interceptors.response.use(response => {
-//   // console.log(response)
-//   if (response.data.meta.status != 200) Message.error(response.data.meta.msg)
-//   return response
-// },error => {
-//   console.log(error)
-//   return Promise.reject(error.response)  // 返回接口错误信息
-// })
 
 Vue.config.productionTip = false
 
