@@ -1,5 +1,10 @@
 import { Get, Post, Put, Delete } from '@/config/axios'
 
+// 登录
+export const loginFn = params => {
+  return Post('login', params)
+}
+
 // 获取左侧菜单
 export const getMenuList = (param) => {
   return Get('menus')

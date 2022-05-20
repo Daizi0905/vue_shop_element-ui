@@ -1,7 +1,7 @@
 // 1.
-import * as echarts from 'echarts'
+// import * as echarts from 'echarts'
 import { getReports } from '@/config/api'
-import _ from 'lodash'
+// import _ from 'lodash'
 const name = 'reports'
 
 const data = function () {

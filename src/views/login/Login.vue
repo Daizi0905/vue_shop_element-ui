@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { loginFn } from '@/config/api'
 export default {
   name: "Login",
   data() {
@@ -53,9 +54,9 @@ export default {
       this.$refs.form.validate( async valid => {
         // console.log(valid)
         if (!valid) return
-        const { data: res } = await this.axios.post('login', this.form)
+        const res = await loginFn(this.form)
         console.log(res)
-        if (res.meta.status !== 200) return this.$message.error('账户不存在，登录失败')
+        if (res.meta.status !== 200) return
         localStorage.setItem('token', res.data.token)
         this.$message.success('登录成功')
         await this.$router.push('/home')
